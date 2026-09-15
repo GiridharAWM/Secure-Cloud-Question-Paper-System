@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Examination Authority</title>
+
+<link rel="stylesheet" href="css/style.css">
+
+<style>
+.section-title{
+    margin-bottom:25px;
+}
+
+.input-group{
+    margin-bottom:18px;
+}
+
+label{
+    display:block;
+    margin-bottom:8px;
+    font-weight:600;
+    color:#dbeafe;
+}
+
+.success-box{
+    display:none;
+    margin-top:20px;
+    padding:16px;
+    border-radius:14px;
+    background:rgba(34,197,94,.12);
+    border:1px solid rgba(34,197,94,.35);
+}
+
+.success-box strong{
+    color:#4ade80;
+}
+</style>
+
+</head>
+
+<body>
+
+<div class="topbar">
+    <div class="logo">Examination Authority</div>
+    <button class="logout" onclick="logout()">Logout</button>
+</div>
+
+<div class="container">
+
+    <div class="hero">
+
+        <div>
+            <h1>Approval & Scheduling Portal</h1>
+            <p>Approve reviewed question papers and securely schedule their release.</p>
+        </div>
+
+        <div class="glow"></div>
+
+    </div>
+
+    <div class="grid">
+
+        <!-- Approval Card -->
+
+        <div class="card">
+
+            <h3 class="section-title">Approve Question Paper</h3>
+
+            <div class="input-group">
+                <label>Paper ID</label>
+                <input id="approvePaperId" type="number" placeholder="Enter Paper ID">
+            </div>
+
+            <button onclick="approvePaper()">
+                Approve Paper
+            </button>
+
+        </div>
+
+        <!-- Schedule Card -->
+
+        <div class="card">
+
+            <h3 class="section-title">Schedule Examination</h3>
+
+            <div class="input-group">
+                <label>Paper ID</label>
+                <input id="schedulePaperId" type="number" placeholder="Enter Paper ID">
+            </div>
+
+            <div class="input-group">
+                <label>Exam Date & Time</label>
+                <input id="examTime" type="datetime-local">
+            </div>
+
+            <button onclick="scheduleExam()">
+                Schedule Exam
+            </button>
+
+            <div id="scheduleSuccess" class="success-box">
+                <strong>Exam Scheduled Successfully</strong>
+                <p>The paper is now locked and will only be released at the scheduled examination time.</p>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script src="js/api.js"></script>
+<script src="js/authority.js"></script>
+
+</body>
+</html>

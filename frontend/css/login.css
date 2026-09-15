@@ -1,0 +1,25 @@
+body{
+display:grid;
+place-items:center;
+}
+
+.login-box{
+width:min(430px,92vw);
+}
+
+.login-box h1{
+font-size:42px;
+margin-bottom:10px;
+}
+
+.subtitle{
+color:#9fb3c8;
+margin-bottom:30px;
+}
+
+.secure-note{
+margin-top:20px;
+text-align:center;
+font-size:14px;
+color:#9fb3c8;
+}

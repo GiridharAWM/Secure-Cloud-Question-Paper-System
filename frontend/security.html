@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Security Administrator</title>
+
+<link rel="stylesheet" href="css/style.css">
+
+</head>
+
+<body>
+
+<div class="topbar">
+
+<div class="logo">Security Operations Center</div>
+
+<button class="logout" onclick="logout()">Logout</button>
+
+</div>
+
+<div class="container">
+
+<h1>Audit Logs</h1>
+
+<div class="card">
+
+<table>
+
+<thead>
+
+<tr>
+<th>User</th>
+<th>Role</th>
+<th>Action</th>
+<th>Time</th>
+</tr>
+
+</thead>
+
+<tbody id="logs"></tbody>
+
+</table>
+
+</div>
+
+</div>
+
+<script src="js/api.js"></script>
+<script src="js/security.js"></script>
+
+</body>
+</html>

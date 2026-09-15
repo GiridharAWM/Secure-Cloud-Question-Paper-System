@@ -1,4 +1,3 @@
-
 const db = require("../database/db");
 const fs = require("fs");
 const path = require("path");
@@ -9,13 +8,14 @@ const {
     generateHash
 } = require("../services/encryptionService");
 
-// CREATE
+// ==========================
+// CREATE QUESTION PAPER
+// ==========================
 exports.createPaper = (req, res) => {
 
     const { title, content } = req.body;
 
     const hash = generateHash(content);
-
     const encryptedData = encryptText(content);
 
     const fileName = `paper_${Date.now()}.enc`;
@@ -28,27 +28,24 @@ exports.createPaper = (req, res) => {
     db.run(
         `INSERT INTO question_papers
         (title, encrypted_file, hash, created_by)
-        VALUES(?,?,?,?)`,
-        [
-            title,
-            fileName,
-            hash,
-            req.user.id
-        ],
-        function(err){
+        VALUES (?, ?, ?, ?)`,
+        [title, fileName, hash, req.user.id],
+        function (err) {
+
+            if (err) {
+                return res.status(500).json({ message: err.message });
+            }
 
             db.run(
-                `INSERT INTO audit_logs(user_id,action)
-                VALUES(?,?)`,
-                [
-                    req.user.id,
-                    "Created Question Paper"
-                ]
+                `INSERT INTO audit_logs(user_id, action, timestamp)
+                VALUES(?, ?, datetime('now','localtime'))`,
+                [req.user.id, "Created Question Paper"]
             );
 
             res.json({
-                message:"Question paper created successfully.",
-                paperId:this.lastID
+                message: "Question paper created successfully.",
+                paperId: this.lastID,
+                hash
             });
 
         }
@@ -56,119 +53,157 @@ exports.createPaper = (req, res) => {
 
 };
 
-// REVIEW
-exports.reviewPaper=(req,res)=>{
+// ==========================
+// GET PENDING PAPERS
+// ==========================
+exports.getPendingPapers = (req, res) => {
 
-    const {paperId,comments}=req.body;
+    db.all(
+        `SELECT
+            id,
+            title,
+            status,
+            created_by
+         FROM question_papers
+         WHERE status='Created'
+         ORDER BY id DESC`,
+        [],
+        (err, rows) => {
 
-    db.run(
-        `UPDATE question_papers
-        SET status='Reviewed'
-        WHERE id=?`,
-        [paperId]
+            if (err) {
+                return res.status(500).json({
+                    message: err.message
+                });
+            }
+
+            res.json(rows);
+
+        }
     );
-
-    db.run(
-        `INSERT INTO reviews
-        (paper_id,reviewer_id,comments)
-        VALUES(?,?,?)`,
-        [
-            paperId,
-            req.user.id,
-            comments
-        ]
-    );
-
-    db.run(
-        `INSERT INTO audit_logs(user_id,action)
-        VALUES(?,?)`,
-        [
-            req.user.id,
-            `Reviewed Paper #${paperId}`
-        ]
-    );
-
-    res.json({
-        message:"Paper reviewed successfully."
-    });
 
 };
 
-// APPROVE
-exports.approvePaper=(req,res)=>{
+// ==========================
+// REVIEW PAPER
+// ==========================
+exports.reviewPaper = (req, res) => {
 
-    const {paperId}=req.body;
-
-    db.run(
-        `UPDATE question_papers
-        SET status='Approved',
-            approved_by=?,
-            release_status='Locked'
-        WHERE id=?`,
-        [
-            req.user.id,
-            paperId
-        ]
-    );
-
-    db.run(
-        `INSERT INTO audit_logs(user_id,action)
-        VALUES(?,?)`,
-        [
-            req.user.id,
-            `Approved Paper #${paperId}`
-        ]
-    );
-
-    res.json({
-        message:"Paper approved successfully."
-    });
-
-};
-
-// SCHEDULE
-exports.schedulePaper=(req,res)=>{
-
-    const {paperId,exam_time}=req.body;
+    const { paperId, comments } = req.body;
 
     db.run(
         `UPDATE question_papers
-        SET exam_time=?,
-            release_status='Locked'
-        WHERE id=?`,
-        [
-            exam_time,
-            paperId
-        ]
-    );
+         SET status='Reviewed'
+         WHERE id=?`,
+        [paperId],
+        (err) => {
 
-    db.run(
-        `INSERT INTO audit_logs(user_id,action)
-        VALUES(?,?)`,
-        [
-            req.user.id,
-            `Scheduled Paper #${paperId}`
-        ]
-    );
+            if (err) {
+                return res.status(500).json({ message: err.message });
+            }
 
-    res.json({
-        message:"Exam scheduled successfully."
-    });
+            db.run(
+                `INSERT INTO reviews
+                (paper_id, reviewer_id, comments)
+                VALUES (?, ?, ?)`,
+                [paperId, req.user.id, comments]
+            );
+
+            db.run(
+                `INSERT INTO audit_logs(user_id, action, timestamp)
+                VALUES(?, ?, datetime('now','localtime'))`,
+                [req.user.id, `Reviewed Paper #${paperId}`]
+            );
+
+            res.json({
+                message: "Paper reviewed successfully."
+            });
+
+        }
+    );
 
 };
 
+// ==========================
+// APPROVE PAPER
+// ==========================
+exports.approvePaper = (req, res) => {
+
+    const { paperId } = req.body;
+
+    db.run(
+        `UPDATE question_papers
+         SET status='Approved',
+             approved_by=?,
+             release_status='Locked'
+         WHERE id=?`,
+        [req.user.id, paperId],
+        (err) => {
+
+            if (err) {
+                return res.status(500).json({ message: err.message });
+            }
+
+            db.run(
+                `INSERT INTO audit_logs(user_id, action, timestamp)
+                VALUES(?, ?, datetime('now','localtime'))`,
+                [req.user.id, `Approved Paper #${paperId}`]
+            );
+
+            res.json({
+                message: "Paper approved successfully."
+            });
+
+        }
+    );
+
+};
+
+// ==========================
+// SCHEDULE EXAM
+// ==========================
+exports.schedulePaper = (req, res) => {
+
+    const { paperId, exam_time } = req.body;
+
+    db.run(
+        `UPDATE question_papers
+         SET exam_time=?,
+             release_status='Locked'
+         WHERE id=?`,
+        [exam_time, paperId],
+        (err) => {
+
+            if (err) {
+                return res.status(500).json({ message: err.message });
+            }
+
+            db.run(
+                `INSERT INTO audit_logs(user_id, action, timestamp)
+                VALUES(?, ?, datetime('now','localtime'))`,
+                [req.user.id, `Scheduled Paper #${paperId}`]
+            );
+
+            res.json({
+                message: "Exam scheduled successfully."
+            });
+
+        }
+    );
+
+};
+
+// ==========================
 // AUTHORIZED DELIVERY
-exports.releasePaper=(req,res)=>{
+// ==========================
+exports.releasePaper = (req, res) => {
 
-    const paperId=req.params.id;
-    const deviceId=req.headers["device-id"];
+    const paperId = req.params.id;
+    const deviceId = req.headers["device-id"];
 
-    if(!deviceId){
-
+    if (!deviceId) {
         return res.status(403).json({
-            message:"Device validation failed."
+            message: "Device validation failed."
         });
-
     }
 
     db.get(
@@ -176,65 +211,56 @@ exports.releasePaper=(req,res)=>{
          FROM question_papers
          WHERE id=?`,
         [paperId],
-        (err,paper)=>{
+        (err, paper) => {
 
-            if(!paper){
+            if (err) {
+                return res.status(500).json({ message: err.message });
+            }
 
+            if (!paper) {
                 return res.status(404).json({
-                    message:"Paper not found."
+                    message: "Paper not found."
                 });
-
             }
 
-            const now=new Date();
-            const examTime=new Date(paper.exam_time);
+            const now = new Date();
+            const examTime = new Date(paper.exam_time);
 
-            if(now<examTime){
-
+            if (now < examTime) {
                 return res.status(403).json({
-                    message:"Paper is locked until scheduled exam time."
+                    message: "Paper is locked until scheduled exam time."
                 });
-
             }
 
-            const encryptedFile=JSON.parse(
-
+            const encryptedFile = JSON.parse(
                 fs.readFileSync(
-                    path.join(
-                        __dirname,
-                        "../uploads",
-                        paper.encrypted_file
-                    ),
+                    path.join(__dirname, "../uploads", paper.encrypted_file),
                     "utf8"
                 )
-
             );
 
-            const decrypted=decryptText(
+            const decrypted = decryptText(
                 encryptedFile.encrypted,
                 encryptedFile.iv
             );
 
             db.run(
                 `UPDATE question_papers
-                SET release_status='Released'
-                WHERE id=?`,
+                 SET release_status='Released'
+                 WHERE id=?`,
                 [paperId]
             );
 
             db.run(
-                `INSERT INTO audit_logs(user_id,action)
-                VALUES(?,?)`,
-                [
-                    req.user.id,
-                    `Delivered Paper #${paperId}`
-                ]
+                `INSERT INTO audit_logs(user_id, action, timestamp)
+                VALUES(?, ?, datetime('now','localtime'))`,
+                [req.user.id, `Delivered Paper #${paperId}`]
             );
 
             res.json({
-                message:"Authorized delivery successful.",
-                device:deviceId,
-                paper:decrypted
+                message: "Authorized delivery successful.",
+                device: deviceId,
+                paper: decrypted
             });
 
         }
@@ -242,8 +268,10 @@ exports.releasePaper=(req,res)=>{
 
 };
 
-// VIEW PAPERS
-exports.getAllPapers=(req,res)=>{
+// ==========================
+// VIEW ALL PAPERS
+// ==========================
+exports.getAllPapers = (req, res) => {
 
     db.all(
         `SELECT
@@ -252,9 +280,14 @@ exports.getAllPapers=(req,res)=>{
             status,
             release_status,
             exam_time
-         FROM question_papers`,
+         FROM question_papers
+         ORDER BY id DESC`,
         [],
-        (err,rows)=>{
+        (err, rows) => {
+
+            if (err) {
+                return res.status(500).json({ message: err.message });
+            }
 
             res.json(rows);
 

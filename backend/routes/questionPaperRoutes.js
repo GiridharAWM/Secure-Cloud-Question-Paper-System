@@ -1,13 +1,14 @@
+const express = require("express");
 
-const express=require("express");
+const router = express.Router();
 
-const router=express.Router();
+const auth = require("../middleware/authMiddleware");
+const role = require("../middleware/roleMiddleware");
+const controller = require("../controllers/questionPaperController");
 
-const auth=require("../middleware/authMiddleware");
-const role=require("../middleware/roleMiddleware");
-
-const controller=require("../controllers/questionPaperController");
-
+// ==========================
+// Question Setter
+// ==========================
 router.post(
     "/create",
     auth,
@@ -15,6 +16,19 @@ router.post(
     controller.createPaper
 );
 
+// ==========================
+// Reviewer
+// ==========================
+
+// View pending papers
+router.get(
+    "/pending",
+    auth,
+    role("Reviewer"),
+    controller.getPendingPapers
+);
+
+// Review paper
 router.post(
     "/review",
     auth,
@@ -22,6 +36,11 @@ router.post(
     controller.reviewPaper
 );
 
+// ==========================
+// Examination Authority
+// ==========================
+
+// Approve paper
 router.post(
     "/approve",
     auth,
@@ -29,6 +48,7 @@ router.post(
     controller.approvePaper
 );
 
+// Schedule paper
 router.post(
     "/schedule",
     auth,
@@ -36,16 +56,22 @@ router.post(
     controller.schedulePaper
 );
 
+// ==========================
+// Authorized Delivery
+// ==========================
 router.get(
     "/release/:id",
     auth,
     controller.releasePaper
 );
 
+// ==========================
+// View All Papers
+// ==========================
 router.get(
     "/all",
     auth,
     controller.getAllPapers
 );
 
-module.exports=router;
+module.exports = router;

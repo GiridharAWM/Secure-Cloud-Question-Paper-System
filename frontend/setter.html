@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Question Setter</title>
+
+<link rel="stylesheet" href="css/style.css">
+
+<style>
+.success-card{
+display:none;
+margin-top:25px;
+padding:22px;
+border-radius:18px;
+background:rgba(34,197,94,.12);
+border:1px solid rgba(34,197,94,.35);
+backdrop-filter:blur(16px);
+}
+
+.success-card h3{
+color:#4ade80;
+margin-bottom:12px;
+}
+
+.info-box{
+margin-top:14px;
+padding:14px;
+border-radius:12px;
+background:rgba(255,255,255,.05);
+border:1px solid rgba(255,255,255,.08);
+word-break:break-word;
+}
+
+.info-box strong{
+color:#60a5fa;
+}
+</style>
+
+</head>
+
+<body>
+
+<div class="topbar">
+<div class="logo">Secure Cloud QPMS</div>
+<button class="logout" onclick="logout()">Logout</button>
+</div>
+
+<div class="container">
+
+<div class="hero">
+
+<div>
+<h1>Question Setter Portal</h1>
+<p>Create encrypted examination question papers securely.</p>
+</div>
+
+<div class="glow"></div>
+
+</div>
+
+<div class="card">
+
+<h3>Create Question Paper</h3>
+
+<input
+id="title"
+placeholder="Enter Paper Title">
+
+<textarea
+id="content"
+rows="8"
+placeholder="Enter Question Paper">
+</textarea>
+
+<button onclick="createPaper()">
+Create & Encrypt
+</button>
+
+</div>
+
+<!-- Success Card -->
+
+<div id="resultCard" class="success-card">
+
+<h3>Question Paper Created Successfully</h3>
+
+<p>
+The system has securely processed the paper.
+</p>
+
+<div class="info-box">
+<strong>Generated Paper ID</strong><br>
+<span id="paperId">-</span>
+</div>
+
+<div class="info-box">
+<strong>SHA-256 Integrity Hash</strong><br>
+<span id="paperHash">-</span>
+</div>
+
+<div class="info-box">
+<strong>Security Status</strong><br>
+AES-256 Encryption Applied • Stored Securely • Ready for Review
+</div>
+
+</div>
+
+</div>
+
+<script src="js/api.js"></script>
+<script src="js/setter.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reviewer Portal</title>
+
+<link rel="stylesheet" href="css/style.css">
+
+<style>
+.table-container{
+margin-top:20px;
+overflow-x:auto;
+}
+
+table{
+width:100%;
+border-collapse:collapse;
+}
+
+th,td{
+padding:16px;
+text-align:left;
+border-bottom:1px solid rgba(255,255,255,.08);
+}
+
+th{
+color:#93c5fd;
+font-weight:700;
+}
+
+.review-btn{
+padding:8px 18px;
+border:none;
+border-radius:10px;
+cursor:pointer;
+background:linear-gradient(90deg,#2563eb,#7c3aed);
+color:white;
+}
+
+.review-box{
+margin-top:30px;
+display:none;
+}
+
+textarea{
+margin-top:15px;
+}
+</style>
+
+</head>
+
+<body>
+
+<div class="topbar">
+
+<div class="logo">Reviewer Portal</div>
+
+<button class="logout" onclick="logout()">Logout</button>
+
+</div>
+
+<div class="container">
+
+<div class="hero">
+
+<div>
+<h1>Pending Question Papers</h1>
+<p>Review newly created papers before examination approval.</p>
+</div>
+
+<div class="glow"></div>
+
+</div>
+
+<div class="card">
+
+<h3>Pending Papers</h3>
+
+<div class="table-container">
+
+<table>
+
+<thead>
+<tr>
+<th>Paper ID</th>
+<th>Title</th>
+<th>Status</th>
+<th>Action</th>
+</tr>
+</thead>
+
+<tbody id="papersTable"></tbody>
+
+</table>
+
+</div>
+
+</div>
+
+<div id="reviewBox" class="card review-box">
+
+<h3>Review Selected Paper</h3>
+
+<p><strong>Paper ID:</strong> <span id="selectedPaperId"></span></p>
+
+<textarea
+id="comments"
+rows="5"
+placeholder="Enter review comments...">
+</textarea>
+
+<button onclick="submitReview()">
+Submit Review
+</button>
+
+</div>
+
+</div>
+
+<script src="js/api.js"></script>
+<script src="js/reviewer.js"></script>
+
+</body>
+</html>
