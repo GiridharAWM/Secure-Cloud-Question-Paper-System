@@ -9,32 +9,27 @@
 <link rel="stylesheet" href="css/style.css">
 
 <style>
-.section-title{
-    margin-bottom:25px;
-}
-
-.input-group{
-    margin-bottom:18px;
+.grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(350px,1fr));
+gap:24px;
 }
 
 label{
-    display:block;
-    margin-bottom:8px;
-    font-weight:600;
-    color:#dbeafe;
+display:block;
+margin-bottom:8px;
+font-weight:600;
+color:#cbd5e1;
 }
 
-.success-box{
-    display:none;
-    margin-top:20px;
-    padding:16px;
-    border-radius:14px;
-    background:rgba(34,197,94,.12);
-    border:1px solid rgba(34,197,94,.35);
+input[type="number"],
+input[type="datetime-local"]{
+width:100%;
 }
 
-.success-box strong{
-    color:#4ade80;
+.result-card{
+display:none;
+margin-top:25px;
 }
 </style>
 
@@ -43,70 +38,93 @@ label{
 <body>
 
 <div class="topbar">
-    <div class="logo">Examination Authority</div>
-    <button class="logout" onclick="logout()">Logout</button>
+
+<div class="logo">Examination Authority</div>
+
+<button class="logout" onclick="logout()">Logout</button>
+
 </div>
 
 <div class="container">
 
-    <div class="hero">
+<div class="hero">
 
-        <div>
-            <h1>Approval & Scheduling Portal</h1>
-            <p>Approve reviewed question papers and securely schedule their release.</p>
-        </div>
+<div>
+<h1>Approval & Scheduling Portal</h1>
+<p>Approve reviewed question papers and securely schedule their release.</p>
+</div>
 
-        <div class="glow"></div>
+<div class="glow"></div>
 
-    </div>
+</div>
 
-    <div class="grid">
+<div class="grid">
 
-        <!-- Approval Card -->
+<!-- Approve Card -->
 
-        <div class="card">
+<div class="card">
 
-            <h3 class="section-title">Approve Question Paper</h3>
+<h3>Approve Question Paper</h3>
 
-            <div class="input-group">
-                <label>Paper ID</label>
-                <input id="approvePaperId" type="number" placeholder="Enter Paper ID">
-            </div>
+<label for="approvePaperId">Paper ID</label>
 
-            <button onclick="approvePaper()">
-                Approve Paper
-            </button>
+<input
+id="approvePaperId"
+type="number"
+placeholder="Enter Paper ID">
 
-        </div>
+<button onclick="approvePaper()">
+Approve Paper
+</button>
 
-        <!-- Schedule Card -->
+</div>
 
-        <div class="card">
+<!-- Schedule Card -->
 
-            <h3 class="section-title">Schedule Examination</h3>
+<div class="card">
 
-            <div class="input-group">
-                <label>Paper ID</label>
-                <input id="schedulePaperId" type="number" placeholder="Enter Paper ID">
-            </div>
+<h3>Schedule Examination</h3>
 
-            <div class="input-group">
-                <label>Exam Date & Time</label>
-                <input id="examTime" type="datetime-local">
-            </div>
+<label for="schedulePaperId">Paper ID</label>
 
-            <button onclick="scheduleExam()">
-                Schedule Exam
-            </button>
+<input
+id="schedulePaperId"
+type="number"
+placeholder="Enter Paper ID">
 
-            <div id="scheduleSuccess" class="success-box">
-                <strong>Exam Scheduled Successfully</strong>
-                <p>The paper is now locked and will only be released at the scheduled examination time.</p>
-            </div>
+<label for="examTime">Exam Date & Time</label>
 
-        </div>
+<input
+id="examTime"
+type="datetime-local">
 
-    </div>
+<button onclick="scheduleExam()">
+Schedule Exam
+</button>
+
+</div>
+
+</div>
+
+<div id="resultCard" class="card result-card">
+
+<h3>Scheduling Summary</h3>
+
+<div class="stats">
+
+<div class="stat-card">
+<h2 id="resultPaperId">-</h2>
+<p>Paper ID</p>
+</div>
+
+<div class="stat-card">
+<h2 id="resultStatus">-</h2>
+<p>Current Status</p>
+</div>
+
+</div>
+
+</div>
 
 </div>
 
@@ -114,4 +132,5 @@ label{
 <script src="js/authority.js"></script>
 
 </body>
+
 </html>

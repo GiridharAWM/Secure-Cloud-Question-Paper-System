@@ -1,59 +1,76 @@
-async function approvePaper() {
+async function approvePaper(){
 
-    try {
+    const paperId = Number(document.getElementById("approvePaperId").value);
 
-        const paperId = Number(document.getElementById("approvePaperId").value);
+    if(!paperId){
+        return showToast("Please enter a valid Paper ID.","error");
+    }
 
-        if (!paperId) {
-            return alert("Please enter a valid Paper ID.");
-        }
+    try{
 
-        const result = await apiRequest("/papers/approve", {
-            method: "POST",
-            body: JSON.stringify({
+        const result = await apiRequest("/papers/approve",{
+
+            method:"POST",
+
+            body:JSON.stringify({
                 paperId
             })
+
         });
 
-        alert(result.message);
+        document.getElementById("resultCard").style.display="block";
+        document.getElementById("resultPaperId").textContent=paperId;
+        document.getElementById("resultStatus").textContent="Approved";
 
-        document.getElementById("approvePaperId").value = "";
+        showToast(result.message);
 
-    } catch (err) {
+    }catch(err){
 
-        alert(err.message);
+        showToast(err.message,"error");
 
     }
 
 }
 
-async function scheduleExam() {
+async function scheduleExam(){
 
-    try {
+    const paperId = Number(document.getElementById("schedulePaperId").value);
+    const examTime = document.getElementById("examTime").value;
 
-        const paperId = Number(document.getElementById("schedulePaperId").value);
-        const examTime = document.getElementById("examTime").value;
+    if(!paperId){
+        return showToast("Please enter a valid Paper ID.","error");
+    }
 
-        if (!paperId || !examTime) {
-            return alert("Please select Paper ID and Exam Date & Time.");
-        }
+    if(!examTime){
+        return showToast("Please select exam date and time.","error");
+    }
 
-        const result = await apiRequest("/papers/schedule", {
-            method: "POST",
-            body: JSON.stringify({
+    try{
+
+        const result = await apiRequest("/papers/schedule",{
+
+            method:"POST",
+
+            body:JSON.stringify({
+
                 paperId,
-                exam_time: examTime
+                exam_time:examTime
+
             })
+
         });
 
-        document.getElementById("scheduleSuccess").style.display = "block";
+        document.getElementById("resultCard").style.display="block";
+        document.getElementById("resultPaperId").textContent=paperId;
+        document.getElementById("resultStatus").textContent="Scheduled";
 
-        document.getElementById("schedulePaperId").value = "";
-        document.getElementById("examTime").value = "";
+        showToast(result.message);
 
-    } catch (err) {
+        document.getElementById("examTime").value="";
 
-        alert(err.message);
+    }catch(err){
+
+        showToast(err.message,"error");
 
     }
 

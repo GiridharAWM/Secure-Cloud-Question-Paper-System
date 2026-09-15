@@ -1,30 +1,44 @@
-async function loadLogs(){
+window.onload = loadLogs;
 
-try{
+async function loadLogs() {
 
-const logs=await apiRequest("/audit/logs");
+    try {
 
-const tbody=document.getElementById("logs");
+        const logs = await apiRequest("/audit/logs");
 
-tbody.innerHTML="";
+        const table = document.getElementById("logsTable");
+        table.innerHTML = "";
 
-(Array.isArray(logs)?logs:[logs]).forEach(log=>{
+        let created = 0;
+        let reviewed = 0;
+        let approved = 0;
 
-tbody.innerHTML+=`
-<tr>
-<td>${log.full_name||""}</td>
-<td>${log.role_name||""}</td>
-<td>${log.action||""}</td>
-<td>${log.timestamp||""}</td>
-</tr>
-`;
+        logs.forEach(log => {
 
-});
+            table.innerHTML += `
+            <tr>
+                <td>${log.full_name || "System"}</td>
+                <td>${log.action}</td>
+                <td>${log.timestamp}</td>
+            </tr>`;
 
-}catch(err){
-alert(err.message);
+            if (log.action.includes("Created")) created++;
+            if (log.action.includes("Reviewed")) reviewed++;
+            if (log.action.includes("Approved")) approved++;
+
+        });
+
+        document.getElementById("totalLogs").textContent = logs.length;
+        document.getElementById("createdCount").textContent = created;
+        document.getElementById("reviewedCount").textContent = reviewed;
+        document.getElementById("approvedCount").textContent = approved;
+
+        showToast("Audit logs refreshed.");
+
+    } catch (err) {
+
+        showToast(err.message, "error");
+
+    }
+
 }
-
-}
-
-window.onload=loadLogs;

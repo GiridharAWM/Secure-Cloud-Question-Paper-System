@@ -1,39 +1,43 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Question Setter</title>
+<title>Question Setter Portal</title>
 
 <link rel="stylesheet" href="css/style.css">
 
 <style>
-.success-card{
+.result-card{
 display:none;
 margin-top:25px;
-padding:22px;
-border-radius:18px;
-background:rgba(34,197,94,.12);
-border:1px solid rgba(34,197,94,.35);
-backdrop-filter:blur(16px);
 }
 
-.success-card h3{
-color:#4ade80;
-margin-bottom:12px;
+.result-grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+gap:18px;
+margin-top:18px;
 }
 
-.info-box{
-margin-top:14px;
-padding:14px;
-border-radius:12px;
-background:rgba(255,255,255,.05);
-border:1px solid rgba(255,255,255,.08);
-word-break:break-word;
+.result-item{
+background:rgba(255,255,255,.06);
+border:1px solid rgba(255,255,255,.12);
+border-radius:16px;
+padding:20px;
+text-align:center;
 }
 
-.info-box strong{
-color:#60a5fa;
+.result-item h2{
+font-size:32px;
+margin-bottom:10px;
+}
+
+.hash-text{
+font-size:13px;
+word-break:break-all;
+color:#93c5fd;
 }
 </style>
 
@@ -42,8 +46,11 @@ color:#60a5fa;
 <body>
 
 <div class="topbar">
+
 <div class="logo">Secure Cloud QPMS</div>
+
 <button class="logout" onclick="logout()">Logout</button>
+
 </div>
 
 <div class="container">
@@ -65,43 +72,44 @@ color:#60a5fa;
 
 <input
 id="title"
-placeholder="Enter Paper Title">
+type="text"
+placeholder="Paper Title"
+required>
 
 <textarea
 id="content"
 rows="8"
-placeholder="Enter Question Paper">
-</textarea>
+placeholder="Enter Question Paper"
+required></textarea>
 
 <button onclick="createPaper()">
-Create & Encrypt
+Create Question Paper
 </button>
 
 </div>
 
-<!-- Success Card -->
+<div id="resultCard" class="card result-card">
 
-<div id="resultCard" class="success-card">
+<h3>Paper Created Successfully</h3>
 
-<h3>Question Paper Created Successfully</h3>
+<div class="result-grid">
 
-<p>
-The system has securely processed the paper.
-</p>
+<div class="result-item">
 
-<div class="info-box">
-<strong>Generated Paper ID</strong><br>
-<span id="paperId">-</span>
+<h2 id="paperIdDisplay">-</h2>
+
+<p>Generated Paper ID</p>
+
 </div>
 
-<div class="info-box">
-<strong>SHA-256 Integrity Hash</strong><br>
-<span id="paperHash">-</span>
+<div class="result-item">
+
+<p class="hash-text" id="hashDisplay">-</p>
+
+<p>SHA-256 Integrity Hash</p>
+
 </div>
 
-<div class="info-box">
-<strong>Security Status</strong><br>
-AES-256 Encryption Applied • Stored Securely • Ready for Review
 </div>
 
 </div>

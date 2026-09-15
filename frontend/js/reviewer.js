@@ -2,112 +2,98 @@ let currentPaperId = null;
 
 window.onload = loadPendingPapers;
 
-async function loadPendingPapers(){
+async function loadPendingPapers() {
 
-try{
+    try {
 
-const papers = await apiRequest("/papers/pending");
+        const papers = await apiRequest("/papers/pending");
 
-const table = document.getElementById("papersTable");
+        const table = document.getElementById("papersTable");
+        table.innerHTML = "";
 
-table.innerHTML = "";
+        if (papers.length === 0) {
 
-if(papers.length===0){
+            table.innerHTML = `
+            <tr>
+                <td colspan="4" style="text-align:center;">
+                    No pending papers available.
+                </td>
+            </tr>`;
 
-table.innerHTML = `
-<tr>
-<td colspan="4" style="text-align:center;">
-No pending papers available.
-</td>
-</tr>
-`;
+            return;
 
-return;
+        }
 
-}
+        papers.forEach(paper => {
 
-papers.forEach(paper=>{
+            table.innerHTML += `
+            <tr>
+                <td>${paper.id}</td>
+                <td>${paper.title || "Untitled Paper"}</td>
+                <td><span class="status created">${paper.status}</span></td>
+                <td>
+                    <button class="review-btn"
+                        onclick="selectPaper(${paper.id})">
+                        Review
+                    </button>
+                </td>
+            </tr>`;
 
-table.innerHTML += `
-<tr>
-<td>${paper.id}</td>
-<td>${paper.title || "Untitled Paper"}</td>
-<td><span style="color:#f59e0b;">${paper.status}</span></td>
-<td>
-<button
-class="review-btn"
-onclick="selectPaper(${paper.id})">
-Review
-</button>
-</td>
-</tr>
-`;
+        });
 
-});
+    } catch (err) {
 
-}catch(err){
+        showToast(err.message, "error");
 
-alert(err.message);
+    }
 
 }
 
-}
+function selectPaper(id) {
 
-function selectPaper(id){
+    currentPaperId = id;
 
-currentPaperId=id;
+    document.getElementById("reviewBox").style.display = "block";
+    document.getElementById("selectedPaperId").textContent = id;
 
-document.getElementById("reviewBox").style.display="block";
-
-document.getElementById("selectedPaperId").textContent=id;
-
-window.scrollTo({
-top:document.body.scrollHeight,
-behavior:"smooth"
-});
+    window.scrollTo({
+        top: document.body.scrollHeight,
+        behavior: "smooth"
+    });
 
 }
 
-async function submitReview(){
+async function submitReview() {
 
-try{
+    try {
 
-const comments=document.getElementById("comments").value.trim();
+        const comments = document.getElementById("comments").value.trim();
 
-if(!comments){
+        if (!comments) {
+            return showToast("Please enter review comments.", "error");
+        }
 
-return alert("Please enter review comments.");
+        const result = await apiRequest("/papers/review", {
+            method: "POST",
+            body: JSON.stringify({
+                paperId: currentPaperId,
+                comments
+            })
+        });
 
-}
+        showToast(result.message);
 
-const result=await apiRequest("/papers/review",{
+        document.getElementById("comments").value = "";
+        document.getElementById("reviewBox").style.display = "none";
 
-method:"POST",
+        currentPaperId = null;
 
-body:JSON.stringify({
+        loadPendingPapers();
 
-paperId:currentPaperId,
+    } catch (err) {
 
-comments
+        showToast(err.message, "error");
 
-})
-
-});
-
-alert(result.message);
-
-document.getElementById("comments").value="";
-
-document.getElementById("reviewBox").style.display="none";
-
-currentPaperId=null;
-
-loadPendingPapers();
-
-}catch(err){
-
-alert(err.message);
-
-}
+    }
 
 }

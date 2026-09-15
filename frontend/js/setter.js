@@ -1,23 +1,42 @@
-async function createPaper() {
-    try {
-        const result = await apiRequest("/papers/create", {
-            method: "POST",
-            body: JSON.stringify({
-                title: title.value.trim(),
-                content: content.value.trim()
+async function createPaper(){
+
+    const title=document.getElementById("title").value.trim();
+    const content=document.getElementById("content").value.trim();
+
+    if(!title||!content){
+        return showToast("Please fill all fields.","error");
+    }
+
+    try{
+
+        const result=await apiRequest("/papers/create",{
+
+            method:"POST",
+
+            body:JSON.stringify({
+                title,
+                content
             })
+
         });
 
-        // Show the success card
-        document.getElementById("resultCard").style.display = "block";
-        document.getElementById("paperId").textContent = result.paperId;
-        document.getElementById("paperHash").textContent = result.hash;
+        document.getElementById("resultCard").style.display="block";
+        document.getElementById("paperIdDisplay").textContent=result.paperId;
+        document.getElementById("hashDisplay").textContent=result.hash;
 
-        // Clear the form
-        title.value = "";
-        content.value = "";
+        showToast("Question paper created successfully.");
 
-    } catch (err) {
-        alert(err.message);
+        document.getElementById("title").value="";
+        document.getElementById("content").value="";
+
+        document.getElementById("resultCard").scrollIntoView({
+            behavior:"smooth"
+        });
+
+    }catch(err){
+
+        showToast(err.message,"error");
+
     }
+
 }

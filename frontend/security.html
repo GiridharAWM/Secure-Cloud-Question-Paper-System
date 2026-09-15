@@ -1,28 +1,95 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Security Administrator</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Security Operations Center</title>
 
 <link rel="stylesheet" href="css/style.css">
+
+<style>
+.audit-table{
+overflow-x:auto;
+margin-top:20px;
+}
+
+.audit-table table{
+width:100%;
+border-collapse:collapse;
+}
+
+.audit-table th,
+.audit-table td{
+padding:14px;
+border-bottom:1px solid rgba(255,255,255,.08);
+text-align:left;
+}
+
+.audit-table th{
+color:#93c5fd;
+}
+
+.refresh-btn{
+margin-top:15px;
+max-width:220px;
+}
+</style>
 
 </head>
 
 <body>
 
 <div class="topbar">
-
 <div class="logo">Security Operations Center</div>
-
 <button class="logout" onclick="logout()">Logout</button>
-
 </div>
 
 <div class="container">
 
-<h1>Audit Logs</h1>
+<div class="hero">
+
+<div>
+<h1>Security Operations Center</h1>
+<p>Monitor audit activity, question paper lifecycle, and system security events in real time.</p>
+</div>
+
+<div class="glow"></div>
+
+</div>
+
+<div class="stats">
+
+<div class="stat-card">
+<h2 id="totalLogs">0</h2>
+<p>Total Audit Logs</p>
+</div>
+
+<div class="stat-card">
+<h2 id="createdCount">0</h2>
+<p>Papers Created</p>
+</div>
+
+<div class="stat-card">
+<h2 id="reviewedCount">0</h2>
+<p>Papers Reviewed</p>
+</div>
+
+<div class="stat-card">
+<h2 id="approvedCount">0</h2>
+<p>Papers Approved</p>
+</div>
+
+</div>
 
 <div class="card">
+
+<h3>Audit Log Timeline</h3>
+
+<button class="refresh-btn" onclick="loadLogs()">
+Refresh Logs
+</button>
+
+<div class="audit-table">
 
 <table>
 
@@ -30,16 +97,17 @@
 
 <tr>
 <th>User</th>
-<th>Role</th>
 <th>Action</th>
 <th>Time</th>
 </tr>
 
 </thead>
 
-<tbody id="logs"></tbody>
+<tbody id="logsTable"></tbody>
 
 </table>
+
+</div>
 
 </div>
 
