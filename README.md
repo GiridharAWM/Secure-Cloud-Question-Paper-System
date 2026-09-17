@@ -2,59 +2,122 @@
 
 A secure cloud computing and cloud security project that protects government examination question papers from unauthorized access, modification, and leakage throughout their lifecycle.
 
-The system uses **Role-Based Access Control (RBAC)**, **AES-256 encryption**, **SHA-256 integrity verification**, **JWT authentication**, **Key Management System (KMS) simulation**, **audit logging**, and a **Controlled Release Engine** that makes question papers accessible only at the scheduled examination time.
+The system implements **Role-Based Access Control (RBAC)**, **AES-256 encryption**, **SHA-256 integrity verification**, **JWT authentication**, **Key Management System (KMS) simulation**, **audit logging**, and a **Time-Based Controlled Release Engine** that makes question papers accessible only at the scheduled examination time from an authorized examination center device.
 
 ---
 
-## Problem Statement
+# Problem Statement
 
-Government competitive examination question papers are highly sensitive documents and may be leaked through insider threats, unauthorized access, insecure storage, compromised systems, or communication vulnerabilities.
+Government examination question papers are highly sensitive documents that may be leaked through insider threats, unauthorized access, insecure storage, compromised systems, or communication vulnerabilities.
 
-This project provides a **secure cloud-based question paper management system** that minimizes the possibility of unauthorized access and leakage before the scheduled examination.
+This project provides a **secure cloud-based question paper management system** that protects question papers throughout their complete lifecycle—from creation to secure delivery during the examination.
 
 ---
 
-## Key Features
+# Key Features
 
 * Secure Login using JWT Authentication
 * Role-Based Access Control (RBAC)
 * Question Paper Creation
 * Review Workflow
-* Approval Workflow
+* Examination Authority Approval
+* Calendar-Based Exam Scheduling
 * AES-256 Encryption
 * SHA-256 Integrity Verification
-* KMS (Encryption Key Management Simulation)
-* Encrypted Cloud Storage
-* Audit Logging
-* Controlled Release Engine
-* Device Validation
-* Authorized Delivery
-* Local Decryption Simulation
+* Key Management System (KMS) Simulation
+* Encrypted Question Paper Storage
+* Security Audit Logging
+* Time-Based Controlled Release
+* Device ID Validation
+* Authorized Paper Delivery
+* Automatic Decryption at Exam Time
+* Security Operations Center Dashboard
 
 ---
 
-## System Architecture
+# System Workflow
 
-The system follows a layered cloud-security architecture.
+The system follows a secure multi-role workflow.
 
-**Workflow**
+## Question Paper Lifecycle
+
+1. Question Setter creates a question paper.
+2. The paper is encrypted using **AES-256**.
+3. A **SHA-256 hash** is generated for integrity verification.
+4. Reviewer reviews the paper and adds comments.
+5. Examination Authority approves the paper.
+6. The examination is scheduled using the calendar.
+7. The paper remains locked until the scheduled examination time.
+8. An authorized examination center device requests the paper.
+9. The system validates the Device ID.
+10. The paper is decrypted and released only after the scheduled time.
+11. Every action is recorded in the Security Audit Logs.
+
+---
+
+# System Architecture
+
+The project follows a layered cloud-security architecture.
+
+## Workflow
 
 Authenticate
-→ Authorize
-→ Create
-→ Review
-→ Approve
-→ Encrypt
-→ Store
-→ Monitor
-→ Controlled Release
-→ Deliver
-→ Decrypt
-→ Examination
+
+↓
+
+Authorize (RBAC)
+
+↓
+
+Create Question Paper
+
+↓
+
+Review Paper
+
+↓
+
+Approve Paper
+
+↓
+
+Schedule Examination
+
+↓
+
+Encrypt (AES-256)
+
+↓
+
+Generate SHA-256 Hash
+
+↓
+
+Store Encrypted Paper
+
+↓
+
+Audit Logging
+
+↓
+
+Time-Based Release Check
+
+↓
+
+Device Validation
+
+↓
+
+Decrypt Paper
+
+↓
+
+Examination Center Access
 
 ---
 
-## Technologies Used
+# Technologies Used
 
 | Category              | Technology        |
 | --------------------- | ----------------- |
@@ -66,14 +129,13 @@ Authenticate
 | Encryption            | AES-256           |
 | Integrity             | SHA-256           |
 | Environment Variables | dotenv            |
-| File Upload           | Multer            |
 | API Testing           | PowerShell / REST |
 | Version Control       | Git               |
 | Repository            | GitHub            |
 
 ---
 
-## Project Structure
+# Project Structure
 
 ```text
 Secure-Cloud-Question-Paper-System
@@ -92,65 +154,83 @@ Secure-Cloud-Question-Paper-System
 ├── frontend
 │   ├── css
 │   ├── js
-│   └── images
+│   ├── index.html
+│   ├── setter.html
+│   ├── reviewer.html
+│   ├── authority.html
+│   ├── security.html
+│   └── exam-center.html
 │
 ├── .env
-├── .gitignore
 ├── package.json
-└── README.md
+├── README.md
+└── screenshots (optional)
 ```
 
-### Module Purpose
+## Module Purpose
 
-* **Controllers** – Handle application logic.
-* **Routes** – API endpoints.
-* **Middleware** – Authentication and RBAC.
-* **Services** – Encryption and security operations.
-* **Database** – SQLite database and initialization.
-* **Uploads** – Encrypted question papers.
-* **Keys** – AES encryption key (KMS simulation).
-* **Logs** – Security and audit logs.
+| Module      | Purpose                             |
+| ----------- | ----------------------------------- |
+| Controllers | Handle application business logic   |
+| Routes      | Define API endpoints                |
+| Middleware  | JWT authentication and RBAC         |
+| Services    | Encryption and security operations  |
+| Database    | SQLite database and initialization  |
+| Uploads     | Stores encrypted question papers    |
+| Keys        | AES encryption key (KMS simulation) |
+| Logs        | Security and audit logs             |
+| Frontend    | User portals for all roles          |
 
 ---
 
-## Installation
+# User Roles
 
-### 1. Clone Repository
+| Role                   | Responsibilities                       |
+| ---------------------- | -------------------------------------- |
+| Question Setter        | Create encrypted question papers       |
+| Reviewer               | Review papers and add comments         |
+| Examination Authority  | Approve and schedule examinations      |
+| Security Administrator | Monitor audit logs                     |
+| Examination Center     | Securely access papers after exam time |
+
+---
+
+# Installation
+
+## 1. Clone the Repository
 
 ```bash
 git clone https://github.com/YOUR_USERNAME/Secure-Cloud-Question-Paper-System.git
 ```
 
-### 2. Open Project
+## 2. Open the Project
 
 ```bash
 cd Secure-Cloud-Question-Paper-System
 ```
 
-### 3. Install Dependencies
+## 3. Install Dependencies
 
 ```bash
 npm install
 ```
 
-### 4. Configure Environment
+## 4. Configure Environment Variables
 
 Create a `.env` file.
-
-Example:
 
 ```env
 PORT=5000
 JWT_SECRET=your_secret_key
 ```
 
-### 5. Start the Server
+## 5. Start the Server
 
 ```bash
 npm run dev
 ```
 
-Server runs on:
+The application runs at:
 
 ```text
 http://localhost:5000
@@ -158,81 +238,96 @@ http://localhost:5000
 
 ---
 
-## Workflow
+# Login Credentials (Demo)
 
-### Question Setter
+| Role                   | Email                  | Password      |
+| ---------------------- | ---------------------- | ------------- |
+| Question Setter        | `setter@example.com`   | `Password123` |
+| Reviewer               | `reviewer@example.com` | `Password123` |
+| Examination Authority  | `exam@example.com`     | `Password123` |
+| Security Administrator | `security@example.com` | `Password123` |
 
-* Login
-* Create question paper
-* Paper encrypted using AES-256
-* SHA-256 hash generated
+---
 
-### Reviewer
+# Portal Demonstration
 
-* Review paper
-* Add comments
-* Paper marked as Reviewed
+## Login Portal
 
-### Examination Authority
+* Secure JWT Authentication
+* Role-based dashboard redirection
 
-* Approve paper
-* Schedule examination time
-* Paper remains Locked
+## Question Setter Portal
 
-### Controlled Release
+* Create question papers
+* AES-256 encryption
+* SHA-256 integrity hash generation
+* Automatic Paper ID generation
 
-* Access denied before exam time
-* Authorized device required
-* Paper released only at scheduled time
+## Reviewer Portal
 
-### Security Administrator
+* View pending papers
+* Review question papers
+* Add review comments
+
+## Examination Authority Portal
+
+* Approve reviewed papers
+* Schedule examinations using a calendar
+* Automatic redirection to the Examination Center
+
+## Examination Center
+
+* Device ID validation
+* Time-based controlled release
+* Automatic AES-256 decryption
+* Secure question paper display
+
+## Security Operations Center
 
 * View audit logs
-* Monitor security activities
+* Monitor paper lifecycle
+* Track security events
 
 ---
 
-## Security Mechanisms
+# Security Mechanisms
 
-| Security Feature  | Purpose                             |
-| ----------------- | ----------------------------------- |
-| JWT               | User authentication                 |
-| RBAC              | Restricts user permissions          |
-| AES-256           | Encrypts question papers            |
-| SHA-256           | Detects modifications               |
-| KMS Simulation    | Stores encryption key separately    |
-| Audit Logs        | Records every action                |
-| Time-Based Access | Prevents early access               |
-| Device Validation | Allows only authorized systems      |
-| HTTPS/TLS         | Secure communication (architecture) |
+| Security Feature   | Purpose                                    |
+| ------------------ | ------------------------------------------ |
+| JWT                | User authentication                        |
+| RBAC               | Restricts user permissions                 |
+| AES-256            | Encrypts question papers                   |
+| SHA-256            | Detects modifications                      |
+| KMS Simulation     | Stores encryption keys separately          |
+| Audit Logs         | Records every system action                |
+| Time-Based Access  | Prevents early access                      |
+| Device Validation  | Allows only authorized examination devices |
+| Controlled Release | Releases papers only after scheduled time  |
 
 ---
 
-## Sample Input
+# Sample API Requests
 
-Create Question Paper
+## Create Question Paper
 
 ```json
 {
   "title": "Mathematics Model Paper",
-  "content": "1. Find x. 2. Solve the equation."
+  "content": "1. Find x.\n2. Solve the equation."
 }
 ```
 
----
-
-## Sample Output
-
-Paper Created
+### Response
 
 ```json
 {
   "message": "Question paper created successfully.",
-  "paperId": 1
+  "paperId": 24,
+  "hash": "SHA-256 Hash Value"
 }
 ```
 
-Paper Approved
+## Approve Paper
 
 ```json
 {
@@ -240,7 +335,15 @@ Paper Approved
 }
 ```
 
-Early Release Attempt
+## Schedule Examination
+
+```json
+{
+  "message": "Exam scheduled successfully."
+}
+```
+
+## Early Access Attempt
 
 ```json
 {
@@ -248,46 +351,75 @@ Early Release Attempt
 }
 ```
 
-Authorized Delivery
+## Authorized Delivery
 
 ```json
 {
   "message": "Authorized delivery successful.",
-  "device": "CENTER-001"
+  "device": "CENTER-001",
+  "paper": "What is RAM?"
 }
 ```
 
 ---
 
-## Cloud Security Features
+# Cloud Security Concepts
 
-The project incorporates cloud computing concepts by using:
+This project demonstrates several cloud computing and cloud security concepts, including:
 
-* Encrypted cloud storage
-* Separate key management
-* Secure metadata storage
+* Secure cloud storage architecture
+* Encryption before storage
+* Separate key management (KMS simulation)
+* Role-Based Access Control
+* Secure authentication
 * Audit logging
-* Monitoring support
-* Backup and disaster recovery architecture
+* Time-based access control
+* Authorized device validation
 * Controlled release mechanism
-* Secure authorized delivery
+* Secure delivery architecture
 
 ---
 
-## Future Enhancements
+# AWS Deployment Architecture
 
-* Real Cloud KMS integration
+The current implementation runs locally using Node.js and SQLite. The deployment architecture is designed for AWS.
+
+| AWS Service       | Purpose                          |
+| ----------------- | -------------------------------- |
+| Amazon EC2        | Hosts the Node.js application    |
+| Amazon S3         | Stores encrypted question papers |
+| AWS KMS           | Manages encryption keys          |
+| Amazon CloudWatch | Monitoring and logging           |
+| IAM               | Access control                   |
+| HTTPS/TLS         | Secure communication             |
+
+---
+
+# Future Enhancements
+
+* AWS KMS Integration
 * Multi-Factor Authentication (OTP)
-* WAF integration
-* IDS/IPS integration
-* DLP integration
-* Real-time monitoring dashboard
-* Automatic incident response
+* Web Application Firewall (WAF)
+* IDS/IPS Integration
+* Data Loss Prevention (DLP)
+* Real-Time Monitoring Dashboard
+* Automatic Incident Response
+* Email Notifications
+* Cloud Backup Automation
+* AWS RDS Migration
 
 ---
 
-## Author
+# Author
 
 **Giridhar**
 
-Computer Science and Engineering (Cloud Computing & Cloud Security Project)
+Computer Science and Engineering
+
+Cloud Computing & Cloud Security Project
+
+---
+
+# License
+
+This project is developed for **educational and academic purposes** as a Cloud Computing and Cloud Security mini-project.
