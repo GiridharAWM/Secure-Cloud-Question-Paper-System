@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Examination Center</title>
+
+<link rel="stylesheet" href="css/style.css">
+
+<style>
+
+.result-card{
+display:none;
+margin-top:25px;
+}
+
+.paper-box{
+margin-top:20px;
+padding:22px;
+border-radius:18px;
+background:rgba(255,255,255,.06);
+border:1px solid rgba(255,255,255,.12);
+white-space:pre-wrap;
+line-height:1.8;
+font-size:16px;
+}
+
+.device-note{
+margin-top:12px;
+font-size:14px;
+color:#9fb3c8;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="topbar">
+
+<div class="logo">
+Examination Center
+</div>
+
+<button class="logout" onclick="logout()">
+Logout
+</button>
+
+</div>
+
+<div class="container">
+
+<div class="hero">
+
+<div>
+
+<h1>Secure Question Paper Access</h1>
+
+<p>
+Question papers are released only after the scheduled examination time
+and only from an authorized examination device.
+</p>
+
+</div>
+
+<div class="glow"></div>
+
+</div>
+
+<div class="card">
+
+<h3>Open Scheduled Question Paper</h3>
+
+<label>Paper ID</label>
+
+<input
+id="paperId"
+type="number"
+placeholder="Enter Paper ID">
+
+<label>Authorized Device ID</label>
+
+<input
+id="deviceId"
+type="text"
+placeholder="Example: CENTER-001">
+
+<p class="device-note">
+Only authorized examination center devices can access the paper.
+</p>
+
+<button onclick="openPaper()">
+Open Question Paper
+</button>
+
+</div>
+
+<div id="resultCard" class="card result-card">
+
+<h3>Released Question Paper</h3>
+
+<div class="stats">
+
+<div class="stat-card">
+<h2 id="paperNumber">-</h2>
+<p>Paper ID</p>
+</div>
+
+<div class="stat-card">
+<h2>Released</h2>
+<p>Access Status</p>
+</div>
+
+</div>
+
+<div id="paperContent" class="paper-box"></div>
+
+</div>
+
+</div>
+
+<script src="js/api.js"></script>
+<script src="js/exam-center.js"></script>
+
+</body>
+
+</html>

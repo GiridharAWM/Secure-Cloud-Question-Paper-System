@@ -53,6 +53,11 @@ app.get("/security", (req, res) => {
     res.sendFile(path.join(__dirname, "../frontend/security.html"));
 });
 
+// Examination Center
+app.get("/exam-center", (req, res) => {
+    res.sendFile(path.join(__dirname, "../frontend/exam-center.html"));
+});
+
 // Start Server
 const PORT = process.env.PORT || 5000;
 
